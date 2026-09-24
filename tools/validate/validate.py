@@ -249,6 +249,10 @@ def validate_soroban_body(fx: Fixture, report: Report) -> None:
     _require(data, "function", str, path, report)
     _require(data, "sequence_number", int, path, report)
 
+    if "args" in data:
+        if not isinstance(data["args"], list):
+            report.error(path, "field 'args', if present, must be an array")
+
     if "expect" not in data:
         report.error(path, "missing required field 'expect'")
         return

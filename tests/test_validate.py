@@ -180,6 +180,11 @@ method = "get-network"
         report = self.run_validation({"a.toml": bad})
         self.assertTrue(any("'expect'" in e for e in report.errors))
 
+    def test_soroban_rejects_non_array_args(self) -> None:
+        bad = VALID_SOROBAN.replace("[expect]", 'args = "not-an-array"\n[expect]')
+        report = self.run_validation({"a.toml": bad})
+        self.assertTrue(any("must be an array" in e and "args" in e for e in report.errors))
+
     def test_rejects_invalid_base64_in_value_base64(self) -> None:
         bad = VALID_XDR.replace('value_base64 = "AAAAAA=="', 'value_base64 = "not-valid-base64!!!"')
         report = self.run_validation({"a.toml": bad})
